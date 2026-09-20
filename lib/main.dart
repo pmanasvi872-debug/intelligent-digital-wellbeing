@@ -1,166 +1,25 @@
 import 'package:flutter/material.dart';
+import 'services/usage_service.dart';
+import 'database/database_service.dart';
 
 void main() {
   runApp(const DigitalWellbeingApp());
 }
-
-// ============================================================
-// APP THEME
-// ============================================================
 
 class DigitalWellbeingApp extends StatelessWidget {
   const DigitalWellbeingApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF5B5FEF);
-    const backgroundColor = Color(0xFFF7F8FC);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Digital Wellbeing',
       theme: ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: backgroundColor,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryColor,
-          brightness: Brightness.light,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: backgroundColor,
-          elevation: 0,
-          centerTitle: false,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: 17,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            borderSide: BorderSide(color: Color(0xFFE5E7EB)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            borderSide: BorderSide(
-              color: primaryColor,
-              width: 1.5,
-            ),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            foregroundColor: Colors.white,
-            elevation: 0,
-            minimumSize: const Size(double.infinity, 54),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: const Color(0xFFF7F9FC),
+        fontFamily: 'Roboto',
       ),
-      home: const SplashScreen(),
-    );
-  }
-}
-
-// ============================================================
-// SPLASH SCREEN
-// ============================================================
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-        );
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF5B5FEF),
-              Color(0xFF7B7EF5),
-              Color(0xFF9A9CF8),
-            ],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 105,
-                height: 105,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.18),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: const Icon(
-                  Icons.phone_android_rounded,
-                  size: 58,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 28),
-              const Text(
-                'Digital Wellbeing',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Build healthier digital habits',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white.withOpacity(0.85),
-                ),
-              ),
-              const SizedBox(height: 35),
-              const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: const LoginScreen(),
     );
   }
 }
@@ -169,136 +28,126 @@ class _SplashScreenState extends State<SplashScreen> {
 // LOGIN SCREEN
 // ============================================================
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController =
+      TextEditingController();
+
+  final TextEditingController passwordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void login() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 45, 24, 24),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 58,
-                height: 58,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE9E9FF),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: const Icon(
-                  Icons.spa_rounded,
-                  color: Color(0xFF5B5FEF),
-                  size: 31,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                'Welcome back',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              Text(
-                'Continue your journey toward healthier digital habits.',
-                style: TextStyle(
-                  fontSize: 16,
-                  height: 1.5,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-
-              const SizedBox(height: 38),
-
-              const Text(
-                'Email',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              const TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  prefixIcon: Icon(Icons.mail_outline_rounded),
-                ),
+              const Icon(
+                Icons.health_and_safety,
+                size: 80,
+                color: Colors.blue,
               ),
 
               const SizedBox(height: 20),
 
               const Text(
-                'Password',
+                'Digital Wellbeing',
                 style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 9),
+              const SizedBox(height: 10),
 
-              const TextField(
+              const Text(
+                'Understand your smartphone habits',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: 'Enter your password',
-                  prefixIcon: Icon(Icons.lock_outline_rounded),
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 24),
 
               SizedBox(
                 width: double.infinity,
-                height: 54,
+                height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
-                  },
+                  onPressed: login,
                   child: const Text(
                     'Login',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 17),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 15),
 
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Don't have an account? Create one",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const RegisterScreen(),
                     ),
-                  ),
+                  );
+                },
+                child: const Text(
+                  'Create an account',
                 ),
               ),
             ],
@@ -313,139 +162,98 @@ class LoginScreen extends StatelessWidget {
 // REGISTER SCREEN
 // ============================================================
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() =>
+      _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController nameController =
+      TextEditingController();
+
+  final TextEditingController emailController =
+      TextEditingController();
+
+  final TextEditingController passwordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void register() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            const ProfileSetupScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Create Account',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: const Text('Create Account'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Start your journey',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              Text(
-                'Tell us a little about yourself to personalize your experience.',
-                style: TextStyle(
-                  fontSize: 15,
-                  height: 1.5,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              const Text(
-                'Name',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              const TextField(
+              TextField(
+                controller: nameController,
                 decoration: InputDecoration(
-                  hintText: 'Enter your name',
-                  prefixIcon: Icon(Icons.person_outline_rounded),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                'Email',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              const TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  prefixIcon: Icon(Icons.mail_outline_rounded),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                'Password',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              const SizedBox(height: 9),
-
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Create a password',
-                  prefixIcon: Icon(Icons.lock_outline_rounded),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const ProfileSetupScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Create Account',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  labelText: 'Name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
 
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+              TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: register,
                   child: const Text(
-                    'Already have an account? Login',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    'Create Account',
                   ),
                 ),
               ),
@@ -471,227 +279,79 @@ class ProfileSetupScreen extends StatefulWidget {
 
 class _ProfileSetupScreenState
     extends State<ProfileSetupScreen> {
-  String screenTimeGoal = '5 hours';
-  String primaryGoal = 'Reduce screen time';
-  String focusTime = '1 hour';
+  final TextEditingController goalController =
+      TextEditingController();
 
-  Widget sectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-      ),
-    );
+  @override
+  void dispose() {
+    goalController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile Setup',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: const Text('Profile Setup'),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 18, 24, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Make it personal',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Tell us about your goal',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Text(
+              'This will help personalize your digital wellbeing experience.',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            TextField(
+              controller: goalController,
+              decoration: InputDecoration(
+                labelText: 'Your wellbeing goal',
+                hintText:
+                    'Example: Reduce social media usage',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
+            ),
 
-              const SizedBox(height: 10),
+            const SizedBox(height: 25),
 
-              Text(
-                'Choose goals that match how you want to use your phone.',
-                style: TextStyle(
-                  fontSize: 15,
-                  height: 1.5,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              sectionTitle('Daily screen-time goal'),
-
-              const SizedBox(height: 9),
-
-              DropdownButtonFormField<String>(
-                value: screenTimeGoal,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.timer_outlined),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: '2 hours',
-                    child: Text('2 hours'),
-                  ),
-                  DropdownMenuItem(
-                    value: '3 hours',
-                    child: Text('3 hours'),
-                  ),
-                  DropdownMenuItem(
-                    value: '4 hours',
-                    child: Text('4 hours'),
-                  ),
-                  DropdownMenuItem(
-                    value: '5 hours',
-                    child: Text('5 hours'),
-                  ),
-                  DropdownMenuItem(
-                    value: '6+ hours',
-                    child: Text('6+ hours'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      screenTimeGoal = value;
-                    });
-                  }
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              sectionTitle('Primary goal'),
-
-              const SizedBox(height: 9),
-
-              DropdownButtonFormField<String>(
-                value: primaryGoal,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.flag_outlined),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Reduce screen time',
-                    child: Text('Reduce screen time'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Improve focus',
-                    child: Text('Improve focus'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Reduce social media',
-                    child: Text('Reduce social media'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Build healthier habits',
-                    child: Text('Build healthier habits'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      primaryGoal = value;
-                    });
-                  }
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              sectionTitle('Daily focus time'),
-
-              const SizedBox(height: 9),
-
-              DropdownButtonFormField<String>(
-                value: focusTime,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.center_focus_strong_rounded,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: '30 minutes',
-                    child: Text('30 minutes'),
-                  ),
-                  DropdownMenuItem(
-                    value: '1 hour',
-                    child: Text('1 hour'),
-                  ),
-                  DropdownMenuItem(
-                    value: '2 hours',
-                    child: Text('2 hours'),
-                  ),
-                  DropdownMenuItem(
-                    value: '3+ hours',
-                    child: Text('3+ hours'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      focusTime = value;
-                    });
-                  }
-                },
-              ),
-
-              const SizedBox(height: 30),
-
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEDEEFF),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.auto_awesome_rounded,
-                      color: Color(0xFF5B5FEF),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const HomeScreen(),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Your goals will help personalize your wellbeing experience.',
-                        style: TextStyle(
-                          fontSize: 14,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
+                  );
+                },
+                child: const Text(
+                  'Continue',
                 ),
               ),
-
-              const SizedBox(height: 25),
-
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -702,23 +362,447 @@ class _ProfileSetupScreenState
 // HOME SCREEN
 // ============================================================
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  Widget smallIconBox(IconData icon) {
-    return Container(
-      width: 46,
-      height: 46,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEDEEFF),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Icon(
-        icon,
-        color: const Color(0xFF5B5FEF),
-      ),
-    );
+  @override
+  State<HomeScreen> createState() =>
+      _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool isLoadingUsage = false;
+
+  List<dynamic> usageData = [];
+
+  List<dynamic> usageEvents = [];
+
+  // ==========================================================
+  // APP NAME MAPPING
+  // ==========================================================
+
+  String getAppDisplayName(String? packageName) {
+    if (packageName == null ||
+        packageName.trim().isEmpty) {
+      return 'Unknown App';
+    }
+
+    const appNames = {
+      'com.example.intelligent_digital_wellbeing':
+          'Digital Wellbeing',
+
+      'com.android.launcher3':
+          'Android Launcher',
+
+      'com.google.android.apps.nexuslauncher':
+          'Pixel Launcher',
+
+      'com.android.settings':
+          'Settings',
+
+      'com.android.chrome':
+          'Chrome',
+
+      'com.google.android.youtube':
+          'YouTube',
+
+      'com.google.android.gm':
+          'Gmail',
+
+      'com.google.android.apps.maps':
+          'Google Maps',
+
+      'com.google.android.apps.photos':
+          'Google Photos',
+
+      'com.google.android.googlequicksearchbox':
+          'Google',
+
+      'com.google.android.apps.messaging':
+          'Google Messages',
+
+      'com.google.android.vending':
+          'Google Play Store',
+
+      'com.whatsapp':
+          'WhatsApp',
+
+      'com.instagram.android':
+          'Instagram',
+
+      'com.facebook.katana':
+          'Facebook',
+
+      'com.spotify.music':
+          'Spotify',
+
+      'com.microsoft.teams':
+          'Microsoft Teams',
+
+      'com.linkedin.android':
+          'LinkedIn',
+    };
+
+    if (appNames.containsKey(packageName)) {
+      return appNames[packageName]!;
+    }
+
+    // Fallback for apps that are not in the mapping.
+    String name = packageName
+        .split('.')
+        .last
+        .replaceAll('_', ' ')
+        .replaceAll('-', ' ');
+
+    if (name.isEmpty) {
+      return packageName;
+    }
+
+    return name[0].toUpperCase() + name.substring(1);
   }
+
+  // ==========================================================
+  // TOTAL USAGE TIME
+  // ==========================================================
+
+  String getTotalUsageTime() {
+    int totalMilliseconds = 0;
+
+    for (final app in usageData) {
+      final usageTime = app['usageTime'];
+
+      if (usageTime != null) {
+        totalMilliseconds +=
+            (usageTime as num).toInt();
+      }
+    }
+
+    final totalMinutes =
+        totalMilliseconds ~/ (1000 * 60);
+
+    final hours = totalMinutes ~/ 60;
+
+    final minutes = totalMinutes % 60;
+
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    }
+
+    return '${minutes}m';
+  }
+
+  // ==========================================================
+  // WELLBEING STATUS
+  // ==========================================================
+
+  String getWellbeingStatus() {
+    int totalMilliseconds = 0;
+
+    for (final app in usageData) {
+      final usageTime = app['usageTime'];
+
+      if (usageTime != null) {
+        totalMilliseconds +=
+            (usageTime as num).toInt();
+      }
+    }
+
+    final totalHours =
+        totalMilliseconds /
+            (1000 * 60 * 60);
+
+    if (totalHours < 3) {
+      return 'Good';
+    } else if (totalHours < 6) {
+      return 'Moderate';
+    } else {
+      return 'Needs Attention';
+    }
+  }
+
+  // ==========================================================
+  // FOCUS PERCENTAGE
+  // ==========================================================
+
+  String getFocusPercentage() {
+    int totalMilliseconds = 0;
+
+    for (final app in usageData) {
+      final usageTime = app['usageTime'];
+
+      if (usageTime != null) {
+        totalMilliseconds +=
+            (usageTime as num).toInt();
+      }
+    }
+
+    final totalHours =
+        totalMilliseconds /
+            (1000 * 60 * 60);
+
+    int focusScore;
+
+    if (totalHours < 2) {
+      focusScore = 90;
+    } else if (totalHours < 4) {
+      focusScore = 80;
+    } else if (totalHours < 6) {
+      focusScore = 65;
+    } else if (totalHours < 8) {
+      focusScore = 50;
+    } else {
+      focusScore = 35;
+    }
+
+    return '$focusScore%';
+  }
+
+  // ==========================================================
+  // SESSION COUNT
+  // ==========================================================
+
+  int getSessionCount() {
+    int count = 0;
+
+    for (final event in usageEvents) {
+      if (event['eventType'] == 'foreground') {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  // ==========================================================
+  // APP SWITCH COUNT
+  // ==========================================================
+
+  int getAppSwitchCount() {
+    int count = 0;
+
+    String? previousPackage;
+
+    for (final event in usageEvents) {
+      if (event['eventType'] == 'foreground') {
+        final packageName =
+            event['packageName']?.toString();
+
+        if (packageName != null) {
+          if (previousPackage != null &&
+              previousPackage != packageName) {
+            count++;
+          }
+
+          previousPackage = packageName;
+        }
+      }
+    }
+
+    return count;
+  }
+
+  // ==========================================================
+  // MOST REOPENED APP
+  // ==========================================================
+
+  String getMostReopenedApp() {
+    final Map<String, int> appOpenCount = {};
+
+    for (final event in usageEvents) {
+      if (event['eventType'] == 'foreground') {
+        final packageName =
+            event['packageName']?.toString();
+
+        if (packageName != null) {
+          appOpenCount[packageName] =
+              (appOpenCount[packageName] ?? 0) + 1;
+        }
+      }
+    }
+
+    if (appOpenCount.isEmpty) {
+      return 'No data';
+    }
+
+    String mostReopened = appOpenCount.keys.first;
+
+    int highestCount =
+        appOpenCount[mostReopened] ?? 0;
+
+    for (final entry in appOpenCount.entries) {
+      if (entry.value > highestCount) {
+        mostReopened = entry.key;
+        highestCount = entry.value;
+      }
+    }
+
+    return getAppDisplayName(mostReopened);
+  }
+
+  // ==========================================================
+  // LOAD USAGE DATA
+  // ==========================================================
+
+  Future<void> loadUsageData() async {
+    setState(() {
+      isLoadingUsage = true;
+    });
+
+    try {
+      final data =
+          await UsageService.getUsageStats();
+
+      final events =
+          await UsageService.getUsageEvents();
+
+      if (!mounted) return;
+
+      setState(() {
+        usageData = data;
+        usageEvents = events;
+        isLoadingUsage = false;
+      });
+
+      // --------------------------------------------------------
+      // CALCULATE TOTAL USAGE
+      // --------------------------------------------------------
+
+      int totalUsage = 0;
+
+      for (final app in data) {
+        final usageTime = app['usageTime'];
+
+        if (usageTime != null) {
+          totalUsage +=
+              (usageTime as num).toInt();
+        }
+      }
+
+      // --------------------------------------------------------
+      // TODAY'S DATE
+      // --------------------------------------------------------
+
+      final today = DateTime.now();
+
+      final date =
+          '${today.year}-'
+          '${today.month.toString().padLeft(2, '0')}-'
+          '${today.day.toString().padLeft(2, '0')}';
+
+      // --------------------------------------------------------
+      // FIND MOST USED APP
+      // --------------------------------------------------------
+
+      String? mostUsedApp;
+
+      if (data.isNotEmpty) {
+        final sortedData =
+            List<dynamic>.from(data);
+
+        sortedData.sort(
+          (a, b) {
+            final usageA =
+                (a['usageTime'] as num?)
+                        ?.toInt() ??
+                    0;
+
+            final usageB =
+                (b['usageTime'] as num?)
+                        ?.toInt() ??
+                    0;
+
+            return usageB.compareTo(usageA);
+          },
+        );
+
+        final packageName =
+            sortedData.first['packageName']
+                ?.toString();
+
+        mostUsedApp =
+            getAppDisplayName(packageName);
+      }
+
+      // --------------------------------------------------------
+      // SESSION COUNT
+      // --------------------------------------------------------
+
+      int sessionCount = 0;
+
+      for (final event in events) {
+        if (event['eventType'] == 'foreground') {
+          sessionCount++;
+        }
+      }
+
+      // --------------------------------------------------------
+      // SAVE DAILY USAGE
+      // --------------------------------------------------------
+
+      await DatabaseService.saveDailyUsage(
+        date: date,
+        totalUsage: totalUsage,
+        appSwitches: getAppSwitchCount(),
+        sessionCount: sessionCount,
+        mostUsedApp: mostUsedApp,
+        mostReopenedApp:
+            getMostReopenedApp(),
+      );
+
+      // --------------------------------------------------------
+      // SAVE INDIVIDUAL APP USAGE
+      // --------------------------------------------------------
+
+      for (final app in data) {
+        final packageName =
+            app['packageName']?.toString();
+
+        final usageTime =
+            (app['usageTime'] as num?)
+                    ?.toInt() ??
+                0;
+
+        if (packageName != null &&
+            usageTime > 0) {
+          await DatabaseService.saveAppUsage(
+            date: date,
+            packageName: packageName,
+            usageTime: usageTime,
+            sessionCount: 0,
+          );
+        }
+      }
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Usage data saved: '
+            '${usageData.length} apps',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        isLoadingUsage = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to get usage data: $e',
+          ),
+        ),
+      );
+    }
+  }
+
+  // ==========================================================
+  // HOME SCREEN
+  // ==========================================================
 
   @override
   Widget build(BuildContext context) {
@@ -727,339 +811,537 @@ class HomeScreen extends StatelessWidget {
         title: const Text(
           'Digital Wellbeing',
           style: TextStyle(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.white,
-              ),
-              icon: const Icon(Icons.person_outline_rounded),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                );
-              },
-            ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const ProfileScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Good morning, Manasvi 👋',
-              style: TextStyle(
-                fontSize: 27,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.4,
-              ),
-            ),
+      body: RefreshIndicator(
+        onRefresh: loadUsageData,
+        child: SingleChildScrollView(
+          physics:
+              const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
 
-            const SizedBox(height: 7),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
 
-            Text(
-              'Let’s make today a little more intentional.',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey.shade600,
-              ),
-            ),
+              // ------------------------------------------------
+              // WELCOME
+              // ------------------------------------------------
 
-            const SizedBox(height: 24),
-
-            // SCREEN TIME
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF5B5FEF),
-                    Color(0xFF777AF4),
-                  ],
+              const Text(
+                'Good day!',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
-                borderRadius: BorderRadius.circular(24),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+
+              const SizedBox(height: 5),
+
+              const Text(
+                'Here is your digital wellbeing overview.',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // ------------------------------------------------
+              // SUMMARY CARDS
+              // ------------------------------------------------
+
+              Row(
                 children: [
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Today’s screen time',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.18),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          '52%',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+
+                  Expanded(
+                    child: _buildSummaryCard(
+                      title: 'Screen Time',
+                      value:
+                          getTotalUsageTime(),
+                      icon: Icons.phone_android,
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Expanded(
+                    child: _buildSummaryCard(
+                      title: 'Wellbeing',
+                      value:
+                          getWellbeingStatus(),
+                      icon:
+                          Icons.health_and_safety,
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Expanded(
+                    child: _buildSummaryCard(
+                      title: 'Focus',
+                      value:
+                          getFocusPercentage(),
+                      icon: Icons.center_focus_strong,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 25),
+
+              // ------------------------------------------------
+              // USAGE DATA BUTTON
+              // ------------------------------------------------
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton.icon(
+                  onPressed:
+                      isLoadingUsage
+                          ? null
+                          : loadUsageData,
+                  icon: isLoadingUsage
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child:
+                              CircularProgressIndicator(
+                            strokeWidth: 2,
                           ),
+                        )
+                      : const Icon(
+                          Icons.refresh,
+                        ),
+                  label: Text(
+                    isLoadingUsage
+                        ? 'Getting Usage Data...'
+                        : 'Get Usage Data',
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // ------------------------------------------------
+              // SMARTPHONE USAGE
+              // ------------------------------------------------
+
+              const Text(
+                'Smartphone Usage',
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              if (usageData.isEmpty)
+                Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.circular(15),
+                  ),
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.bar_chart,
+                        size: 45,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'No usage data loaded yet.',
+                        style: TextStyle(
+                          color: Colors.grey,
                         ),
                       ),
                     ],
                   ),
+                ),
 
-                  const SizedBox(height: 12),
+              if (usageData.isNotEmpty)
+                ...usageData
+                    .take(10)
+                    .map(
+                      (app) {
+                        final packageName =
+                            app['packageName']
+                                ?.toString();
 
-                  const Text(
-                    '2h 35m',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 38,
-                      fontWeight: FontWeight.w700,
+                        final appName =
+                            getAppDisplayName(
+                          packageName,
+                        );
+
+                        final usageTime =
+                            (app['usageTime']
+                                        as num?)
+                                    ?.toInt() ??
+                                0;
+
+                        final minutes =
+                            usageTime ~/
+                                (1000 * 60);
+
+                        final hours =
+                            minutes ~/ 60;
+
+                        final remainingMinutes =
+                            minutes % 60;
+
+                        String formattedTime;
+
+                        if (hours > 0) {
+                          formattedTime =
+                              '${hours}h ${remainingMinutes}m';
+                        } else {
+                          formattedTime =
+                              '${remainingMinutes}m';
+                        }
+
+                        return Card(
+                          margin:
+                              const EdgeInsets.only(
+                            bottom: 8,
+                          ),
+                          child: ListTile(
+                            leading: const CircleAvatar(
+                              child: Icon(
+                                Icons.apps,
+                              ),
+                            ),
+                            title: Text(
+                              appName,
+                              style:
+                                  const TextStyle(
+                                fontWeight:
+                                    FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text(
+                              packageName ??
+                                  'Unknown package',
+                              style:
+                                  const TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            trailing: Text(
+                              formattedTime,
+                              style:
+                                  const TextStyle(
+                                fontWeight:
+                                    FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
 
-                  const SizedBox(height: 4),
+              const SizedBox(height: 25),
 
-                  Text(
-                    'Goal: 5 hours',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
+              // ------------------------------------------------
+              // BEHAVIOUR ACTIVITY
+              // ------------------------------------------------
 
-                  const SizedBox(height: 17),
-
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      value: 0.52,
-                      minHeight: 8,
-                      backgroundColor:
-                          Colors.white.withOpacity(0.22),
-                      valueColor:
-                          const AlwaysStoppedAnimation<Color>(
-                        Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            // WELLBEING
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: const Color(0xFFE9EAF0),
+              const Text(
+                'Behaviour Activity',
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+
+              const SizedBox(height: 12),
+
+              Row(
                 children: [
-                  smallIconBox(Icons.favorite_outline_rounded),
-                  const SizedBox(width: 14),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Your digital wellbeing',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 7),
-                        Text(
-                          'Your behaviour looks healthy today.',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Keep following your daily goals.',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            const SizedBox(height: 18),
-
-            // FOCUS
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: const Color(0xFFE9EAF0),
-                ),
-              ),
-              child: Row(
-                children: [
-                  smallIconBox(
-                    Icons.center_focus_strong_rounded,
-                  ),
-                  const SizedBox(width: 14),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Focus Time',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          '1 hour goal',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(75, 42),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                      ),
-                    ),
-                    child: const Text('Start'),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            // TODAY'S INSIGHT
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF7E6),
-                borderRadius: BorderRadius.circular(22),
-              ),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.lightbulb_outline_rounded,
-                    color: Color(0xFFE49A00),
-                    size: 27,
-                  ),
-                  SizedBox(width: 13),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Today’s insight',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          'You are currently within your daily screen-time goal. Keep the momentum going.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
+                    child: _buildActivityCard(
+                      icon: Icons.login,
+                      title: 'Sessions',
+                      value:
+                          '${getSessionCount()}',
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Expanded(
+                    child: _buildActivityCard(
+                      icon: Icons.swap_horiz,
+                      title: 'App Switches',
+                      value:
+                          '${getAppSwitchCount()}',
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+
+              const SizedBox(height: 10),
+
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.circular(15),
+                ),
+                child: Row(
+                  children: [
+                    const CircleAvatar(
+                      child: Icon(
+                        Icons.repeat,
+                      ),
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    const Expanded(
+                      child: Text(
+                        'Most Reopened App',
+                        style: TextStyle(
+                          fontWeight:
+                              FontWeight.w600,
+                        ),
+                      ),
+                    ),
+
+                    Text(
+                      getMostReopenedApp(),
+                      style: const TextStyle(
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // ------------------------------------------------
+              // TODAY'S INSIGHT
+              // ------------------------------------------------
+
+              const Text(
+                "Today's Insight",
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFEAF3FF),
+                      Color(0xFFF6FAFF),
+                    ],
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.lightbulb,
+                      color: Colors.orange,
+                      size: 30,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Text(
+                      'Your wellbeing status is '
+                      '${getWellbeingStatus()}.',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight:
+                            FontWeight.w600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      'You have used your smartphone '
+                      '${getTotalUsageTime()} today '
+                      'across ${usageData.length} apps.',
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // ------------------------------------------------
+              // INSIGHTS BUTTON
+              // ------------------------------------------------
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const InsightsScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.insights,
+                  ),
+                  label: const Text(
+                    'View Insights',
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
+    );
+  }
 
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 0,
-        height: 72,
-        backgroundColor: Colors.white,
-        indicatorColor: const Color(0xFFEDEEFF),
-        onDestinationSelected: (index) {
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const InsightsScreen(),
-              ),
-            );
-          }
+  // ==========================================================
+  // SUMMARY CARD
+  // ==========================================================
 
-          if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfileScreen(),
-              ),
-            );
-          }
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'Home',
+  Widget _buildSummaryCard({
+    required String title,
+    required String value,
+    required IconData icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: Colors.blue,
+            size: 28,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.insights_outlined),
-            selectedIcon: Icon(Icons.insights_rounded),
-            label: 'Insights',
+
+          const SizedBox(height: 8),
+
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            selectedIcon: Icon(Icons.person_rounded),
-            label: 'Profile',
+
+          const SizedBox(height: 4),
+
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ==========================================================
+  // ACTIVITY CARD
+  // ==========================================================
+
+  Widget _buildActivityCard({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            size: 30,
+            color: Colors.blue,
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.grey,
+            ),
           ),
         ],
       ),
@@ -1078,206 +1360,167 @@ class InsightsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Insights',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+        title: const Text('Insights'),
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 25),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
+
             const Text(
-              'Your digital patterns',
+              'Your Digital Wellbeing',
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 7),
+            const SizedBox(height: 20),
 
-            Text(
-              'A simple view of how you have been using your phone.',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey.shade600,
-              ),
+            _buildInsightCard(
+              icon: Icons.phone_android,
+              title: 'Screen Time',
+              value: '3h 42m',
+              subtitle:
+                  'Your daily smartphone usage',
             ),
 
-            const SizedBox(height: 24),
+            _buildInsightCard(
+              icon: Icons.notifications,
+              title: 'Notifications',
+              value: '84',
+              subtitle:
+                  'Notifications received today',
+            ),
 
-            // WEEKLY SUMMARY
+            _buildInsightCard(
+              icon: Icons.swap_horiz,
+              title: 'App Switching',
+              value: '42 times',
+              subtitle:
+                  'Number of app transitions',
+            ),
+
+            _buildInsightCard(
+              icon:
+                  Icons.health_and_safety,
+              title: 'Digital Balance',
+              value: 'Good',
+              subtitle:
+                  'Current wellbeing status',
+            ),
+
+            const SizedBox(height: 20),
+
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(22),
+              padding:
+                  const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF5B5FEF),
-                    Color(0xFF777AF4),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Weekly screen time',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.85),
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '18h 45m',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    'Average: 2h 40m per day',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            // BEHAVIOUR
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: const Color(0xFFE9EAF0),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Behaviour overview',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEDEEFF),
-                        borderRadius:
-                            BorderRadius.circular(14),
-                      ),
-                      child: const Icon(
-                        Icons.trending_up_rounded,
-                        color: Color(0xFF5B5FEF),
-                      ),
-                    ),
-                    title: const Text(
-                      'Screen time trend',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: const Text(
-                      'Your usage is within your goal.',
-                    ),
-                  ),
-
-                  const Divider(height: 10),
-
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1E8),
-                        borderRadius:
-                            BorderRadius.circular(14),
-                      ),
-                      child: const Icon(
-                        Icons.phone_android_rounded,
-                        color: Color(0xFFE87528),
-                      ),
-                    ),
-                    title: const Text(
-                      'Most used category',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    subtitle: const Text(
-                      'Social & Entertainment',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            // RECOMMENDATION
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEFFAF5),
-                borderRadius: BorderRadius.circular(22),
+                color: Colors.blue.shade50,
+                borderRadius:
+                    BorderRadius.circular(15),
               ),
               child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.auto_awesome_rounded,
-                        color: Color(0xFF2E9D6F),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Personalized recommendation',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  Icon(
+                    Icons.auto_awesome,
+                    color: Colors.blue,
+                    size: 30,
                   ),
-                  SizedBox(height: 14),
+
+                  SizedBox(height: 10),
+
                   Text(
-                    'Try a 15-minute focus session when you notice repeated app switching.',
+                    'AI Behaviour Intelligence',
                     style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 18,
+                      fontWeight:
+                          FontWeight.bold,
                     ),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Text(
+                    'As usage history grows, the system '
+                    'will learn your normal smartphone '
+                    'behaviour and provide personalized '
+                    'insights.',
                   ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInsightCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required String subtitle,
+  }) {
+    return Container(
+      margin:
+          const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+
+          CircleAvatar(
+            child: Icon(icon),
+          ),
+
+          const SizedBox(width: 15),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight:
+                        FontWeight.w600,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1290,158 +1533,96 @@ class InsightsScreen extends StatelessWidget {
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  Widget profileItem(
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFFE9EAF0),
-        ),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 17,
-          vertical: 5,
-        ),
-        leading: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: const Color(0xFFEDEEFF),
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF5B5FEF),
-          ),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        subtitle: Text(subtitle),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'My Profile',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+        title: const Text('Profile'),
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 15, 20, 30),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF5B5FEF),
-                    Color(0xFF777AF4),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(24),
+
+            const CircleAvatar(
+              radius: 50,
+              child: Icon(
+                Icons.person,
+                size: 50,
               ),
-              child: Column(
-                children: [
-                  const CircleAvatar(
-                    radius: 42,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person_rounded,
-                      size: 48,
-                      color: Color(0xFF5B5FEF),
-                    ),
+            ),
+
+            const SizedBox(height: 15),
+
+            const Text(
+              'Manasvi',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 5),
+
+            const Text(
+              'Digital Wellbeing User',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            ListTile(
+              leading:
+                  const Icon(Icons.edit),
+              title:
+                  const Text('Edit Profile'),
+              trailing:
+                  const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const EditProfileScreen(),
                   ),
+                );
+              },
+            ),
 
-                  const SizedBox(height: 14),
+            const Divider(),
 
+            ListTile(
+              leading:
+                  const Icon(Icons.flag),
+              title:
+                  const Text('My Wellbeing Goal'),
+              subtitle:
                   const Text(
-                    'Manasvi',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  Text(
-                    'user@example.com',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+                'Build healthier smartphone habits',
               ),
             ),
 
-            const SizedBox(height: 22),
+            const Divider(),
 
-            profileItem(
-              Icons.access_time_rounded,
-              'Daily Screen-Time Goal',
-              '5 hours',
-            ),
-
-            profileItem(
-              Icons.flag_outlined,
-              'Primary Goal',
-              'Reduce screen time',
-            ),
-
-            profileItem(
-              Icons.center_focus_strong_rounded,
-              'Daily Focus Time',
-              '1 hour',
-            ),
-
-            const SizedBox(height: 10),
-
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const EditProfileScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.edit_outlined),
-                label: const Text(
-                  'Edit Profile',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
+            ListTile(
+              leading:
+                  const Icon(Icons.logout),
+              title:
+                  const Text('Logout'),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const LoginScreen(),
                   ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
+                  (route) => false,
+                );
+              },
             ),
           ],
         ),
@@ -1465,15 +1646,20 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState
     extends State<EditProfileScreen> {
   final TextEditingController nameController =
-      TextEditingController(text: 'Manasvi');
+      TextEditingController(
+    text: 'Manasvi',
+  );
 
-  final TextEditingController emailController =
-      TextEditingController(text: 'user@example.com');
+  final TextEditingController goalController =
+      TextEditingController(
+    text:
+        'Build healthier smartphone habits',
+  );
 
   @override
   void dispose() {
     nameController.dispose();
-    emailController.dispose();
+    goalController.dispose();
     super.dispose();
   }
 
@@ -1481,91 +1667,50 @@ class _EditProfileScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+        title: const Text('Edit Profile'),
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 15, 24, 30),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Personal information',
-              style: TextStyle(
-                fontSize: 27,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              'Update the information shown on your profile.',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey.shade600,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              'Name',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            const SizedBox(height: 9),
 
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                prefixIcon:
-                    Icon(Icons.person_outline_rounded),
+              decoration: InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(12),
+                ),
               ),
             ),
 
-            const SizedBox(height: 20),
-
-            const Text(
-              'Email',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            const SizedBox(height: 9),
+            const SizedBox(height: 18),
 
             TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                prefixIcon:
-                    Icon(Icons.mail_outline_rounded),
+              controller: goalController,
+              decoration: InputDecoration(
+                labelText:
+                    'Wellbeing Goal',
+                border: OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(12),
+                ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 25),
 
             SizedBox(
               width: double.infinity,
-              height: 54,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text(
                   'Save Changes',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
               ),
             ),
