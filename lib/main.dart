@@ -766,7 +766,7 @@ class _PrivacyConsentScreenState
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -965,7 +965,7 @@ class _PrivacyConsentScreenState
   }
 }
 // ============================================================
-// PROFILE SETUP SCREEN
+// PROFILE SETUP / GOALS SCREEN
 // ============================================================
 
 class ProfileSetupScreen extends StatefulWidget {
@@ -981,76 +981,187 @@ class _ProfileSetupScreenState
   final TextEditingController goalController =
       TextEditingController();
 
+  String selectedGoal = '';
+
+  final List<String> goals = [
+    'Reduce screen time',
+    'Reduce social media usage',
+    'Improve focus',
+    'Improve sleep',
+    'Build healthier phone habits',
+  ];
+
   @override
   void dispose() {
     goalController.dispose();
     super.dispose();
   }
 
+  void continueSetup() {
+    if (selectedGoal.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a wellbeing goal'),
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
-        title: const Text('Profile Setup'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.black87,
+        title: const Text(
+          'Goals Setup',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Tell us about your goal',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              'This will help personalize your digital wellbeing experience.',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            TextField(
-              controller: goalController,
-              decoration: InputDecoration(
-                labelText: 'Your wellbeing goal',
-                hintText:
-                    'Example: Reduce social media usage',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Set your wellbeing goal',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E293B),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 10),
 
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const HomeScreen(),
+              const Text(
+                'Choose what you want to improve in your digital wellbeing journey.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+              ),
+
+              const SizedBox(height: 28),
+
+              const Text(
+                'Select your main goal',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              ...goals.map(
+                (goal) => Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: selectedGoal == goal
+                          ? Colors.blue
+                          : Colors.grey.shade300,
+                      width: selectedGoal == goal ? 2 : 1,
                     ),
-                  );
-                },
-                child: const Text(
-                  'Continue',
+                  ),
+                  child: RadioListTile<String>(
+                    value: goal,
+                    groupValue: selectedGoal,
+                    title: Text(
+                      goal,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    activeColor: Colors.blue,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGoal = value!;
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 18),
+
+              const Text(
+                'Or describe your own goal',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              TextField(
+                controller: goalController,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  hintText:
+                      'Example: I want to use my phone less before sleeping',
+                  prefixIcon: const Icon(
+                    Icons.edit_outlined,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+                onChanged: (value) {
+                  if (value.trim().isNotEmpty) {
+                    setState(() {
+                      selectedGoal = '';
+                    });
+                  }
+                },
+              ),
+
+              const SizedBox(height: 30),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: continueSetup,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
