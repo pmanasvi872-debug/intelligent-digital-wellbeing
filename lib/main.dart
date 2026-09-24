@@ -457,7 +457,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const ProfileSetupScreen(),
+      builder: (context) => const ProfileSetupScreen(),
       ),
     );
   }
@@ -698,6 +698,268 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+// ============================================================
+// PRIVACY CONSENT SCREEN
+// ============================================================
+
+class PrivacyConsentScreen extends StatefulWidget {
+  const PrivacyConsentScreen({super.key});
+
+  @override
+  State<PrivacyConsentScreen> createState() =>
+      _PrivacyConsentScreenState();
+}
+
+class _PrivacyConsentScreenState
+    extends State<PrivacyConsentScreen> {
+  bool consentGiven = false;
+
+  void continueToGoals() {
+    if (!consentGiven) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please accept the privacy consent to continue.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfileSetupScreen(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.black87,
+        title: const Text(
+          'Privacy & Consent',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 15),
+
+              // Privacy Icon
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.privacy_tip_outlined,
+                    size: 60,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              const Text(
+                'Your Privacy Matters',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              const Text(
+                'Before we continue, please review how your data will be used.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                  height: 1.5,
+                ),
+              ),
+
+              const SizedBox(height: 28),
+
+              // Data Usage Card
+              _privacyItem(
+                icon: Icons.phone_android_outlined,
+                title: 'Screen & App Usage',
+                description:
+                    'The app may use screen-time and app usage information to understand your digital habits.',
+              ),
+
+              const SizedBox(height: 16),
+
+              _privacyItem(
+                icon: Icons.insights_outlined,
+                title: 'Personalized Insights',
+                description:
+                    'Usage information can be analyzed to provide personalized digital wellbeing insights and recommendations.',
+              ),
+
+              const SizedBox(height: 16),
+
+              _privacyItem(
+                icon: Icons.lock_outline,
+                title: 'Your Control',
+                description:
+                    'You can review and manage your wellbeing preferences from the app settings.',
+              ),
+
+              const SizedBox(height: 25),
+
+              // Consent Checkbox
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: consentGiven,
+                      onChanged: (value) {
+                        setState(() {
+                          consentGiven = value ?? false;
+                        });
+                      },
+                    ),
+                    const Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 11),
+                        child: Text(
+                          'I understand and agree to the use of my digital wellbeing data for providing personalized insights.',
+                          style: TextStyle(
+                            fontSize: 14,
+                            height: 1.4,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 28),
+
+              // Continue Button
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: continueToGoals,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Agree & Continue',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _privacyItem({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Colors.grey.shade200,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            color: Colors.blue,
+            size: 28,
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
