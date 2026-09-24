@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'services/usage_service.dart';
 import 'database/database_service.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 void main() {
   runApp(const DigitalWellbeingApp());
@@ -2027,6 +2028,140 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
+              const Text(
+  'Weekly Screen Time',
+  style: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
+const SizedBox(height: 12),
+
+Container(
+  height: 250,
+  width: double.infinity,
+  padding: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black12,
+        blurRadius: 8,
+        offset: Offset(0, 3),
+      ),
+    ],
+  ),
+  child: BarChart(
+    BarChartData(
+      maxY: 6,
+      minY: 0,
+
+      gridData: FlGridData(
+        show: true,
+      ),
+
+      borderData: FlBorderData(
+        show: false,
+      ),
+
+      titlesData: FlTitlesData(
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+          ),
+        ),
+
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            getTitlesWidget: (value, meta) {
+              const days = [
+                'Mon',
+                'Tue',
+                'Wed',
+                'Thu',
+                'Fri',
+                'Sat',
+                'Sun',
+              ];
+
+              return Text(
+                days[value.toInt()],
+                style: const TextStyle(
+                  fontSize: 11,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+
+      barGroups: [
+        BarChartGroupData(
+          x: 0,
+          barRods: [
+            BarChartRodData(toY: 2.5),
+          ],
+        ),
+        BarChartGroupData(
+          x: 1,
+          barRods: [
+            BarChartRodData(toY: 3.2),
+          ],
+        ),
+        BarChartGroupData(
+          x: 2,
+          barRods: [
+            BarChartRodData(toY: 4.0),
+          ],
+        ),
+        BarChartGroupData(
+          x: 3,
+          barRods: [
+            BarChartRodData(toY: 2.8),
+          ],
+        ),
+        BarChartGroupData(
+          x: 4,
+          barRods: [
+            BarChartRodData(toY: 3.7),
+          ],
+        ),
+        BarChartGroupData(
+          x: 5,
+          barRods: [
+            BarChartRodData(toY: 4.5),
+          ],
+        ),
+        BarChartGroupData(
+          x: 6,
+          barRods: [
+            BarChartRodData(toY: 3.5),
+          ],
+        ),
+      ],
+    ),
+  ),
+),
+
+const SizedBox(height: 20),
+
               // ------------------------------------------------
               // INSIGHTS BUTTON
               // ------------------------------------------------
@@ -2160,7 +2295,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 // ============================================================
-// INSIGHTS SCREEN
+// INSIGHTS SCREEN - STEP 12
+// DIGITAL WELLBEING SCORE
 // ============================================================
 
 class InsightsScreen extends StatelessWidget {
@@ -2168,16 +2304,22 @@ class InsightsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const int overallScore = 78;
+    const int focusScore = 82;
+    const int sleepScore = 75;
+    const int behaviourScore = 80;
+    const int usageBalanceScore = 76;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insights'),
+        title: const Text('Digital Wellbeing'),
       ),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
+
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
             const Text(
@@ -2190,54 +2332,222 @@ class InsightsScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            _buildInsightCard(
-              icon: Icons.phone_android,
-              title: 'Screen Time',
-              value: '3h 42m',
-              subtitle:
-                  'Your daily smartphone usage',
-            ),
+            // =========================
+            // OVERALL SCORE
+            // =========================
 
-            _buildInsightCard(
-              icon: Icons.notifications,
-              title: 'Notifications',
-              value: '84',
-              subtitle:
-                  'Notifications received today',
-            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(25),
 
-            _buildInsightCard(
-              icon: Icons.swap_horiz,
-              title: 'App Switching',
-              value: '42 times',
-              subtitle:
-                  'Number of app transitions',
-            ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
 
-            _buildInsightCard(
-              icon:
-                  Icons.health_and_safety,
-              title: 'Digital Balance',
-              value: 'Good',
-              subtitle:
-                  'Current wellbeing status',
+              child: Column(
+                children: [
+
+                  const Text(
+                    'Digital Wellbeing Score',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+
+                    child: Stack(
+                      alignment: Alignment.center,
+
+                      children: [
+
+                        SizedBox(
+                          width: 150,
+                          height: 150,
+
+                          child: CircularProgressIndicator(
+                            value: overallScore / 100,
+                            strokeWidth: 14,
+                            backgroundColor:
+                                Colors.grey.shade200,
+                            color: Colors.blue,
+                          ),
+                        ),
+
+                        Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+
+                          children: const [
+
+                            Text(
+                              '$overallScore',
+                              style: TextStyle(
+                                fontSize: 38,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+
+                            Text(
+                              '/ 100',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  const Text(
+                    'Good',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  const Text(
+                    'Your digital behaviour is currently balanced.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 20),
 
+            // =========================
+            // DETAILED SCORES
+            // =========================
+
+            const Text(
+              'Detailed Scores',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            _buildScoreCard(
+              icon: Icons.center_focus_strong,
+              title: 'Focus Score',
+              score: focusScore,
+            ),
+
+            _buildScoreCard(
+              icon: Icons.bedtime,
+              title: 'Sleep Score',
+              score: sleepScore,
+            ),
+
+            _buildScoreCard(
+              icon: Icons.psychology,
+              title: 'Behaviour Stability',
+              score: behaviourScore,
+            ),
+
+            _buildScoreCard(
+              icon: Icons.balance,
+              title: 'Usage Balance',
+              score: usageBalanceScore,
+            ),
+
+            const SizedBox(height: 20),
+
+            // =========================
+            // WHY SCORE CHANGED
+            // =========================
+
+            const Text(
+              'Why your score changed',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
             Container(
               width: double.infinity,
-              padding:
-                  const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
+
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                children: [
+
+                  _buildReason(
+                    Icons.check_circle,
+                    'Good focus behaviour today',
+                    Colors.green,
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  _buildReason(
+                    Icons.check_circle,
+                    'App switching is under control',
+                    Colors.green,
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  _buildReason(
+                    Icons.warning_amber_rounded,
+                    'Screen time can be reduced',
+                    Colors.orange,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // =========================
+            // AI EXPLANATION
+            // =========================
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
-                borderRadius:
-                    BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(18),
               ),
+
               child: const Column(
                 crossAxisAlignment:
                     CrossAxisAlignment.start,
+
                 children: [
+
                   Icon(
                     Icons.auto_awesome,
                     color: Colors.blue,
@@ -2250,21 +2560,615 @@ class InsightsScreen extends StatelessWidget {
                     'AI Behaviour Intelligence',
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight:
-                          FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
                   SizedBox(height: 8),
 
                   Text(
-                    'As usage history grows, the system '
-                    'will learn your normal smartphone '
-                    'behaviour and provide personalized '
-                    'insights.',
+                    'The system analyses your smartphone '
+                    'usage patterns to understand your '
+                    'digital behaviour and provide '
+                    'personalized wellbeing insights.',
                   ),
                 ],
               ),
+            ), // Container
+
+// =========================
+// PERSONALIZED RECOMMENDATIONS
+// STEP 13
+// =========================
+
+const Text(
+  'Personalized Recommendations',
+  style: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
+const SizedBox(height: 12),
+
+Container(
+  width: double.infinity,
+  padding: const EdgeInsets.all(20),
+
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(18),
+  ),
+
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+
+      const Row(
+        children: [
+          Icon(
+            Icons.lightbulb,
+            color: Colors.orange,
+            size: 28,
+          ),
+
+          SizedBox(width: 10),
+
+          Text(
+            'Recommended for you',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+
+      const SizedBox(height: 18),
+
+      _buildRecommendation(
+        context: context,
+        icon: Icons.timer,
+        title: 'Reduce Screen Time',
+        description:
+            'Try reducing your screen time by 30 minutes today.',
+        buttonText: 'Set Goal',
+      ),
+
+      const Divider(height: 25),
+
+      _buildRecommendation(
+        context: context,
+        icon: Icons.center_focus_strong,
+        title: 'Start a Focus Session',
+        description:
+            'A focused 30-minute session can help improve your productivity.',
+        buttonText: 'Start Focus',
+      ),
+
+      const Divider(height: 25),
+
+      _buildRecommendation(
+        context: context,
+        icon: Icons.phone_disabled,
+        title: 'Take a Short Break',
+        description:
+            'You have been using your phone continuously. Consider taking a 5-minute break.',
+        buttonText: 'Take Break',
+      ),
+    ],
+  ),
+),
+
+const SizedBox(height: 20),
+const Text(
+  'Focus Trend',
+  style: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
+const SizedBox(height: 12),
+
+Container(
+  width: double.infinity,
+  padding: const EdgeInsets.all(20),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(20),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black12,
+        blurRadius: 8,
+        offset: Offset(0, 3),
+      ),
+    ],
+  ),
+  child: Row(
+    children: [
+      const CircleAvatar(
+        radius: 28,
+        child: Icon(
+          Icons.center_focus_strong,
+          size: 28,
+        ),
+      ),
+
+      const SizedBox(width: 16),
+
+      const Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Focus Score',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              '82 / 100',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(height: 4),
+
+            Text(
+              'Your focus is improving this week.',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+
+const SizedBox(height: 20),
+
+],
+          
+        ),
+      ),
+    );
+  }
+
+  // =========================
+  // SCORE CARD
+  // =========================
+Widget _buildRecommendation({
+  required BuildContext context,
+  required IconData icon,
+  required String title,
+  required String description,
+  required String buttonText,
+}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+
+      CircleAvatar(
+        backgroundColor: Colors.blue.shade50,
+        child: Icon(
+          icon,
+          color: Colors.blue,
+        ),
+      ),
+
+      const SizedBox(width: 15),
+
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              description,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+    OutlinedButton(
+  onPressed: () {
+    if (buttonText == 'Start Focus') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FocusModeScreen(),
+        ),
+      );
+    } else if (buttonText == 'Take Break') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const InterventionScreen(),
+        ),
+      );
+    }
+  },
+  child: Text(buttonText),
+),
+            
+          ],
+        ),
+      ),
+    ],
+  );
+}
+  Widget _buildScoreCard({
+    required IconData icon,
+    required String title,
+    required int score,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+
+      padding: const EdgeInsets.all(18),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+
+      child: Row(
+        children: [
+
+          CircleAvatar(
+            backgroundColor: Colors.blue.shade50,
+            child: Icon(
+              icon,
+              color: Colors.blue,
+            ),
+          ),
+
+          const SizedBox(width: 15),
+
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          Text(
+            '$score / 100',
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // =========================
+  // REASON
+  // =========================
+
+  Widget _buildReason(
+    IconData icon,
+    String text,
+    Color color,
+  ) {
+    return Row(
+      children: [
+
+        Icon(
+          icon,
+          color: color,
+          size: 22,
+        ),
+
+        const SizedBox(width: 10),
+
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ============================================================
+// FOCUS MODE - STEP 14
+// ============================================================
+
+class FocusModeScreen extends StatefulWidget {
+  const FocusModeScreen({super.key});
+
+  @override
+  State<FocusModeScreen> createState() => _FocusModeScreenState();
+}
+
+class _FocusModeScreenState extends State<FocusModeScreen> {
+  int selectedDuration = 30;
+  bool sessionStarted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Focus Mode'),
+      ),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            const Text(
+              'Smart Focus Mode',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              'Create a focused session and reduce distractions.',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // =========================
+            // FOCUS SESSION CARD
+            // =========================
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(25),
+
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Column(
+                children: [
+
+                  const CircleAvatar(
+                    radius: 38,
+                    backgroundColor: Color(0xFFE3F2FD),
+
+                    child: Icon(
+                      Icons.center_focus_strong,
+                      size: 40,
+                      color: Colors.blue,
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  const Text(
+                    'Focus Session',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'Choose how long you want to focus.',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  // =========================
+                  // DURATION
+                  // =========================
+
+                  const Align(
+                    alignment: Alignment.centerLeft,
+
+                    child: Text(
+                      'Duration',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    children: [
+
+                      _durationButton(15),
+
+                      const SizedBox(width: 10),
+
+                      _durationButton(30),
+
+                      const SizedBox(width: 10),
+
+                      _durationButton(60),
+                    ],
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  // =========================
+                  // START BUTTON
+                  // =========================
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          sessionStarted = true;
+                        });
+                      },
+
+                      icon: const Icon(
+                        Icons.play_arrow,
+                      ),
+
+                      label: const Text(
+                        'Start Focus',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // =========================
+            // SESSION STATUS
+            // =========================
+
+            if (sessionStarted)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+
+                child: Column(
+                  children: [
+
+                    const Icon(
+                      Icons.timer,
+                      size: 35,
+                      color: Colors.blue,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    const Text(
+                      'Focus Session Active',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      '$selectedDuration minutes',
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          sessionStarted = false;
+                        });
+                      },
+
+                      icon: const Icon(
+                        Icons.stop,
+                      ),
+
+                      label: const Text(
+                        'End Session',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            const SizedBox(height: 25),
+
+            // =========================
+            // FOCUS STATISTICS
+            // =========================
+
+            const Text(
+              'Focus Statistics',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            Row(
+              children: [
+
+                Expanded(
+                  child: _statCard(
+                    Icons.event_available,
+                    'Sessions Today',
+                    '2',
+                  ),
+                ),
+
+                const SizedBox(width: 12),
+
+                Expanded(
+                  child: _statCard(
+                    Icons.timer,
+                    'Focus Time',
+                    '45 min',
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -2272,65 +3176,404 @@ class InsightsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInsightCard({
-    required IconData icon,
-    required String title,
-    required String value,
-    required String subtitle,
-  }) {
+  // =========================
+  // DURATION BUTTON
+  // =========================
+
+  Widget _durationButton(int minutes) {
+    final bool selected = selectedDuration == minutes;
+
+    return Expanded(
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            selectedDuration = minutes;
+          });
+        },
+
+        style: OutlinedButton.styleFrom(
+          backgroundColor:
+              selected ? Colors.blue : Colors.white,
+
+          foregroundColor:
+              selected ? Colors.white : Colors.blue,
+
+          side: const BorderSide(
+            color: Colors.blue,
+          ),
+        ),
+
+        child: Text(
+          '$minutes min',
+        ),
+      ),
+    );
+  }
+
+  // =========================
+  // STAT CARD
+  // =========================
+
+  Widget _statCard(
+    IconData icon,
+    String title,
+    String value,
+  ) {
     return Container(
-      margin:
-          const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(18),
+
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+
+      child: Column(
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+
         children: [
 
-          CircleAvatar(
-            child: Icon(icon),
+          Icon(
+            icon,
+            color: Colors.blue,
           ),
 
-          const SizedBox(width: 15),
+          const SizedBox(height: 10),
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight:
-                        FontWeight.w600,
-                  ),
-                ),
-
-                const SizedBox(height: 4),
-
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 13,
             ),
           ),
+
+          const SizedBox(height: 5),
 
           Text(
             value,
             style: const TextStyle(
-              fontSize: 18,
-              fontWeight:
-                  FontWeight.bold,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// INTERVENTION SCREEN - STEP 15
+// ============================================================
+
+class InterventionScreen extends StatefulWidget {
+  const InterventionScreen({super.key});
+
+  @override
+  State<InterventionScreen> createState() =>
+      _InterventionScreenState();
+}
+
+class _InterventionScreenState
+    extends State<InterventionScreen> {
+
+  bool interventionAccepted = false;
+  String interventionResponse = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Smart Intervention'),
+      ),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            const Text(
+              'Personalized Intervention',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              'A small action can help you maintain a healthy digital routine.',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // =========================
+            // INTERVENTION ALERT
+            // =========================
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+
+              decoration: BoxDecoration(
+                color: Colors.orange.shade50,
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                children: [
+
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Colors.orange,
+                    size: 38,
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  const Text(
+                    'Potential Excessive Usage',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'You have been using your phone continuously '
+                    'for longer than your recommended session.',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // =========================
+            // RECOMMENDED ACTION
+            // =========================
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                children: [
+
+                  const Text(
+                    'Recommended Action',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  const Text(
+                    'Take a 5-minute break or start a Focus Session '
+                    'to reduce distractions.',
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // START FOCUS
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          interventionAccepted = true;
+                          interventionResponse = 'Focus Mode started';
+                        });
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const FocusModeScreen(),
+                          ),
+                        );
+                      },
+
+                      icon: const Icon(
+                        Icons.center_focus_strong,
+                      ),
+
+                      label: const Text(
+                        'Start Focus Mode',
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // TAKE BREAK
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          interventionAccepted = true;
+                          interventionResponse = '5-minute break started';
+                        });
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              '5-minute break started.',
+                              
+                            ),
+                          ),
+                        );
+                      },
+
+                      icon: const Icon(
+                        Icons.free_breakfast,
+                      ),
+
+                      label: const Text(
+                        'Take a 5-Minute Break',
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // SNOOZE
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+
+                    child: TextButton(
+                      onPressed: () {
+  setState(() {
+    interventionAccepted = true;
+    interventionResponse = 'Intervention snoozed';
+  });
+
+  ScaffoldMessenger.of(context)
+      .showSnackBar(
+    const SnackBar(
+      content: Text(
+        'Intervention snoozed.',
+      ),
+    ),
+  );
+},
+                          
+                    
+
+                      child: const Text(
+                        'Snooze',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // =========================
+            // RESPONSE
+            // =========================
+
+            if (interventionAccepted)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+
+                child:  Row(
+                  children: [
+
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+
+                    SizedBox(width: 10),
+
+                    Expanded(
+                      child: Text(
+                       interventionResponse.isEmpty
+    ? 'Your response has been recorded.'
+    : interventionResponse,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            const SizedBox(height: 25),
+
+            // =========================
+            // WHY THIS INTERVENTION
+            // =========================
+
+            const Text(
+              'Why this intervention?',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(18),
+
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(18),
+              ),
+
+              child: const Text(
+                'The system uses your usage behaviour, '
+                'personal baseline and risk level to select '
+                'a suitable intervention.',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
