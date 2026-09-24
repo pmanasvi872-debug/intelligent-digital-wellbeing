@@ -49,7 +49,57 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // ============================================================
+  // LOGIN FUNCTION
+  // ============================================================
+
   void login() {
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+
+    // Email empty check
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your email'),
+        ),
+      );
+      return;
+    }
+
+    // Gmail validation
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid Gmail address'),
+        ),
+      );
+      return;
+    }
+
+    // Password empty check
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your password'),
+        ),
+      );
+      return;
+    }
+
+    // Password validation
+    if (password != '123456') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Password failed. Please check your password.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Successful login
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -96,11 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 40),
 
+              // Email
               TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
+                  hintText: 'example@gmail.com',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -109,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 16),
 
+              // Password
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -122,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 24),
 
+              // Login Button
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -134,8 +188,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 15),
+              // Forgot Password
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ForgotPasswordScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
 
+              const SizedBox(height: 5),
+
+              // Register
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -158,6 +232,201 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+
+// ============================================================
+// FORGOT PASSWORD SCREEN
+// ============================================================
+
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
+  @override
+  State<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState
+    extends State<ForgotPasswordScreen> {
+  final TextEditingController emailController =
+      TextEditingController();
+
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>();
+
+  void sendResetLink() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Password reset link sent to your email.',
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
+
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.black87,
+        title: const Text(
+          'Forgot Password',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+
+          child: Form(
+            key: _formKey,
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+
+                const Center(
+                  child: Icon(
+                    Icons.lock_reset,
+                    size: 80,
+                    color: Colors.blue,
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                const Center(
+                  child: Text(
+                    'Reset your password',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E293B),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                const Center(
+                  child: Text(
+                    'Enter your registered email address and we will send you a password reset link.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const SizedBox(height: 35),
+
+                TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    hintText: 'Enter your registered email',
+                    prefixIcon: const Icon(
+                      Icons.email_outlined,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+
+                  validator: (value) {
+                    if (value == null ||
+                        value.trim().isEmpty) {
+                      return 'Please enter your email';
+                    }
+
+                    final emailRegex =
+                        RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+
+                    if (!emailRegex.hasMatch(
+                      value.trim(),
+                    )) {
+                      return 'Please enter a valid email';
+                    }
+
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 25),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+
+                  child: ElevatedButton(
+                    onPressed: sendResetLink,
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(12),
+                      ),
+                    ),
+
+                    child: const Text(
+                      'Send Reset Link',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+
+                    child: const Text(
+                      'Back to Login',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 // ============================================================
 // REGISTER SCREEN
 // ============================================================
