@@ -5,3 +5,10 @@ _pycache_/
 .venv/
 *.log
 ml/venv312/
+
+# Flutter generated files
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
