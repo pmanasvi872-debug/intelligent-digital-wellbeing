@@ -3262,7 +3262,6 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
     );
   }
 }
-
 // ============================================================
 // INTERVENTION SCREEN - STEP 15
 // ============================================================
@@ -3593,11 +3592,10 @@ class ProfileScreen extends StatelessWidget {
         title: const Text('Profile'),
       ),
 
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             const CircleAvatar(
               radius: 50,
               child: Icon(
@@ -3612,8 +3610,7 @@ class ProfileScreen extends StatelessWidget {
               'Manasvi',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight:
-                    FontWeight.bold,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
@@ -3628,13 +3625,11 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            // Edit Profile
             ListTile(
-              leading:
-                  const Icon(Icons.edit),
-              title:
-                  const Text('Edit Profile'),
-              trailing:
-                  const Icon(Icons.chevron_right),
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit Profile'),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
                   context,
@@ -3648,24 +3643,48 @@ class ProfileScreen extends StatelessWidget {
 
             const Divider(),
 
+            // Wellbeing Goal
             ListTile(
-              leading:
-                  const Icon(Icons.flag),
-              title:
-                  const Text('My Wellbeing Goal'),
-              subtitle:
-                  const Text(
+              leading: const Icon(Icons.flag),
+              title: const Text('My Wellbeing Goal'),
+              subtitle: const Text(
                 'Build healthier smartphone habits',
               ),
             ),
 
             const Divider(),
 
+            // Usage Permission
             ListTile(
-              leading:
-                  const Icon(Icons.logout),
-              title:
-                  const Text('Logout'),
+              leading: const Icon(
+                Icons.bar_chart_rounded,
+              ),
+              title: const Text(
+                'Usage Permission',
+              ),
+              subtitle: const Text(
+                'Manage app usage access',
+              ),
+              trailing: const Icon(
+                Icons.chevron_right,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const UsagePermissionScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const Divider(),
+
+            // Logout
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
               onTap: () {
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -3683,6 +3702,173 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+// ============================================================
+// USAGE PERMISSION SCREEN
+// ============================================================
+
+class UsagePermissionScreen extends StatelessWidget {
+  const UsagePermissionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
+      appBar: AppBar(
+        title: const Text('Usage Permission'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+
+              // Icon
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.bar_chart_rounded,
+                  size: 55,
+                  color: Colors.blue,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              const Text(
+                'Allow Usage Access',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              const Text(
+                'Digital Wellbeing needs access to your app usage data to understand your screen time and provide personalized insights.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                  height: 1.5,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Information Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  children: [
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.access_time_rounded,
+                        color: Colors.blue,
+                      ),
+                      title: Text(
+                        'Screen Time',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Track how much time you spend on your phone.',
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.insights_rounded,
+                        color: Colors.blue,
+                      ),
+                      title: Text(
+                        'Personalized Insights',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Get insights based on your usage patterns.',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Spacer(),
+
+              // Allow Access
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Allow Usage Access',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Maybe Later',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 // ============================================================
 // EDIT PROFILE SCREEN
