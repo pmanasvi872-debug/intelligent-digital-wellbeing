@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intelligent_digital_wellbeing/aadi/behavior_analyzer.dart';
-import 'package:intelligent_digital_wellbeing/aadi/insight_generator.dart';
+import 'package:intelligent_digital_wellbeing/AI/behavior_analyzer.dart';
+import 'package:intelligent_digital_wellbeing/AI/insight_generator.dart';
 
 void main() {
   test('BehaviorAnalyzer detects high screen-time usage', () {

@@ -1,3 +1,5 @@
+import 'prediction_screen.dart';
+import 'personal_baseline_screen.dart';
 import 'package:flutter/material.dart';
 import 'services/usage_service.dart';
 import 'database/database_service.dart';
@@ -1536,7 +1538,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+const SizedBox(height: 12),
 
+<<<<<<< HEAD
               const SizedBox(height: 12),
 
               _navigationTile(
@@ -1613,6 +1617,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 const GoalProgressScreen(),
               ),
 
+=======
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const BehaviourScreen(),
+        ),
+      );
+    },
+    icon: const Icon(
+      Icons.psychology_rounded,
+    ),
+    label: const Text(
+      'AI Behaviour',
+    ),
+  ),
+),
+>>>>>>> 3281857685ed6d31303f4e6cf7e3ba60a1f513b8
               const SizedBox(height: 30),
             ],
           ),
@@ -3829,7 +3854,6 @@ class _FocusModeScreenState
     );
   }
 }
-
 // ============================================================
 // INTERVENTION
 // ============================================================
@@ -4675,7 +4699,12 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
+<<<<<<< HEAD
       body: Padding(
+=======
+
+      body: SingleChildScrollView(
+>>>>>>> 3281857685ed6d31303f4e6cf7e3ba60a1f513b8
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -4708,13 +4737,11 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            // Edit Profile
             ListTile(
-              leading:
-                  const Icon(Icons.edit),
-              title:
-                  const Text('Edit Profile'),
-              trailing:
-                  const Icon(Icons.chevron_right),
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit Profile'),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
                   context,
@@ -4728,24 +4755,48 @@ class ProfileScreen extends StatelessWidget {
 
             const Divider(),
 
+            // Wellbeing Goal
             ListTile(
-              leading:
-                  const Icon(Icons.flag),
-              title:
-                  const Text('My Wellbeing Goal'),
-              subtitle:
-                  const Text(
+              leading: const Icon(Icons.flag),
+              title: const Text('My Wellbeing Goal'),
+              subtitle: const Text(
                 'Build healthier smartphone habits',
               ),
             ),
 
             const Divider(),
 
+            // Usage Permission
             ListTile(
-              leading:
-                  const Icon(Icons.logout),
-              title:
-                  const Text('Logout'),
+              leading: const Icon(
+                Icons.bar_chart_rounded,
+              ),
+              title: const Text(
+                'Usage Permission',
+              ),
+              subtitle: const Text(
+                'Manage app usage access',
+              ),
+              trailing: const Icon(
+                Icons.chevron_right,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const UsagePermissionScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const Divider(),
+
+            // Logout
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
               onTap: () {
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -4763,6 +4814,173 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+// ============================================================
+// USAGE PERMISSION SCREEN
+// ============================================================
+
+class UsagePermissionScreen extends StatelessWidget {
+  const UsagePermissionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F9FC),
+      appBar: AppBar(
+        title: const Text('Usage Permission'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+
+              // Icon
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.bar_chart_rounded,
+                  size: 55,
+                  color: Colors.blue,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              const Text(
+                'Allow Usage Access',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              const Text(
+                'Digital Wellbeing needs access to your app usage data to understand your screen time and provide personalized insights.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                  height: 1.5,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Information Card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Column(
+                  children: [
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.access_time_rounded,
+                        color: Colors.blue,
+                      ),
+                      title: Text(
+                        'Screen Time',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Track how much time you spend on your phone.',
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.insights_rounded,
+                        color: Colors.blue,
+                      ),
+                      title: Text(
+                        'Personalized Insights',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Get insights based on your usage patterns.',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Spacer(),
+
+              // Allow Access
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Allow Usage Access',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Maybe Later',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 // ============================================================
 // EDIT PROFILE
@@ -4851,6 +5069,7 @@ class _EditProfileScreenState
     );
   }
 }
+<<<<<<< HEAD
 
 // ============================================================
 // SHARED UI HELPERS
@@ -5005,4 +5224,375 @@ Widget _infoBox(
       ],
     ),
   );
+=======
+class BehaviourScreen extends StatelessWidget {
+  const BehaviourScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('AI Behaviour'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Current Behaviour',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              'Your current digital behaviour based on recent usage.',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Current behaviour
+            Card(
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.psychology_rounded,
+                        color: Colors.orange,
+                        size: 32,
+                      ),
+                    ),
+
+                    const SizedBox(width: 16),
+
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Current Behaviour',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Distracted',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'Frequent switching between apps.',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 28),
+
+            const Text(
+              'Behaviour Classes',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            _behaviourCard(
+              context,
+              'Focused',
+              'Long periods of concentrated activity.',
+              Icons.center_focus_strong,
+            ),
+
+            _behaviourCard(
+              context,
+              'Balanced',
+              'Healthy balance between screen activities.',
+              Icons.balance,
+            ),
+
+            _behaviourCard(
+              context,
+              'Distracted',
+              'Frequent switching between applications.',
+              Icons.shuffle,
+            ),
+
+            _behaviourCard(
+              context,
+              'Excessive',
+              'High and prolonged digital activity.',
+              Icons.access_time_filled,
+            ),
+
+            _behaviourCard(
+              context,
+              'Potential Doomscrolling',
+              'Repeated consumption of content for extended periods.',
+              Icons.phone_android,
+            ),
+
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BehaviourRiskScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(fontSize: 16),
+                  const SizedBox(height: 20),
+
+SizedBox(
+  width: double.infinity,
+  height: 52,
+  child: ElevatedButton.icon(
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PredictionScreen(),
+        ),
+      );
+    },
+    icon: const Icon(Icons.auto_awesome_rounded),
+    label: const Text('View Prediction'),
+  ),
+),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _behaviourCard(
+    BuildContext context,
+    String title,
+    String description,
+    IconData icon,
+  ) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(description),
+      ),
+    );
+  }
+}
+class BehaviourRiskScreen extends StatelessWidget {
+  const BehaviourRiskScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(f
+      appBar: AppBar(
+        title: const Text('Behaviour Risk'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Behaviour Risk Assessment',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            const Text(
+              'Your recent digital behaviour has been analysed to identify possible risk patterns.',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 28),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade50,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.orange.shade200,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Current Risk Level',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  Text(
+                    'Moderate',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange.shade700,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'Some behavioural patterns may require attention.',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            const Text(
+              'Risk Indicators',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            _riskItem(
+              'Frequent app switching',
+              'Multiple app switches were detected.',
+            ),
+
+            _riskItem(
+              'Extended screen time',
+              'Long usage sessions may affect your daily routine.',
+            ),
+
+            _riskItem(
+              'Repeated app reopening',
+              'Some applications were reopened frequently.',
+            ),
+
+            const SizedBox(height: 28),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PersonalBaselineScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _riskItem(String title, String description) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.orange,
+          ),
+
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(description),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+>>>>>>> 3281857685ed6d31303f4e6cf7e3ba60a1f513b8
 }
